@@ -59,7 +59,7 @@ export interface IDataSet {
 //
 // Creates the query resolver for a dataset with a particular configuration.
 //
-export async function createQueryResolver(config: IInlineResolverConfig, inlineData: IDataSet): Promise<any> {
+export function createQueryResolver(config: IInlineResolverConfig, inlineData: IDataSet): any {
     const resolver: any = { 
         get: {
         },
