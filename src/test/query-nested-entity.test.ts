@@ -42,6 +42,25 @@ describe("query nested entity", () => {
         });
     });
 
+    it("can set global entity resolver to be a different name to the nested entity", async ()  => {
+
+        const config: IResolverConfig = {
+            movie: {
+                primaryKey: "name",
+                nested: {
+                    the_director: {
+                        from: "director",
+                        parentKey: "directorId",
+                    },
+                },
+            },
+        };
+
+        const resolver = await createQueryResolver(config, {});
+        
+        expect(resolver.get.movie.nested.the_director.from).toBe("director");
+    });
+
     it("can create function to retreive multiple nested entities", async ()  => {
 
         const config: IResolverConfig = {

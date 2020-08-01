@@ -109,7 +109,7 @@ export function createQueryResolver(config: IInlineResolverConfig, inlineData: I
                 const nestedEntityConfig = nested[nestedEntityTypeName];
 
                 entityResolver.nested[nestedEntityTypeName] = {
-                    entityGlobalResolverName: nestedEntityConfig.from,
+                    from: nestedEntityConfig.from,
                     invoke: async (parent: any, args: any, context: any) => {
                         const nestedEntityConfigName = nestedEntityConfig.from || nestedEntityTypeName;
                         const nestedEntityType = config[nestedEntityConfigName]; //todo: error check this exists!
