@@ -74,6 +74,7 @@ describe("query nested entity", () => {
                     nested: {
                         director: {
                             multiple: true,
+                            parentKey: "name",
                             foreignKey: "movie",
                         },
                     },

@@ -150,15 +150,16 @@ export function createQueryResolver(config: IInlineResolverConfig, inlineData: I
 
                         const nestedEntityConfigName = nestedEntityConfig.from || nestedEntityTypeName;
                         const nestedEntityType = config.entities[nestedEntityConfigName]; //todo: error check this exists!
-                        const parentKey = nestedEntityConfig.parentKey || entityType.primaryKey; //todo: error check entity type object exists! todo: error check one of these exists.
+                        const parentKey = nestedEntityConfig.parentKey || nestedEntityTypeName;
                         const nestedKey = nestedEntityConfig.foreignKey || nestedEntityType.primaryKey;
                         const nestedEntities = inlineData[nestedEntityConfigName] || []; //todo: error check this exists!
 
                         verbose(config, 1, `Filtering ${nestedEntities.length} entities using nested key "${nestedKey}" and parent key "${parentKey}".`);
 
-                        const filteredEntities = nestedEntities.filter(nestedEntity => nestedEntity[nestedKey] === parent[parentKey]);
+                        const parentId = parent[parentKey];
+                        const filteredEntities = nestedEntities.filter(nestedEntity => nestedEntity[nestedKey] === parentId);
 
-                        verbose(config, 1, `Result is ${filteredEntities.length} filtered entities.`);
+                        verbose(config, 1, `Result is ${filteredEntities.length} filtered entities with "${nestedKey}" === to ${parentId}.`);
 
                         if (nestedEntityConfig.multiple === true) {
                             verbose(config, 1, `Nested resolver returns multiple entities.`);
