@@ -5,8 +5,10 @@ describe("query entities", () => {
     it("can create resolver to retreive multiple entities", async ()  => {
 
         const config: IInlineResolverConfig = {
-            movie: {
-                primaryKey: "name",
+            entities: {
+                movie: {
+                    primaryKey: "name",
+                },
             },
         };
 
@@ -41,11 +43,13 @@ describe("query entities", () => {
     it("can create resolver for multiple entity types", async ()  => {
 
         const config: IInlineResolverConfig = {
-            movie: {
-                primaryKey: "name",
-            },
-            actor: {
-                primaryKey: "name",
+            entities: {
+                movie: {
+                    primaryKey: "name",
+                },
+                actor: {
+                    primaryKey: "name",
+                },
             },
         };
 

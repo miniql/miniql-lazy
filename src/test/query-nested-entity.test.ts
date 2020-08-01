@@ -5,16 +5,18 @@ describe("query nested entity", () => {
     it("can create function to retreive a nested entity", async ()  => {
 
         const config: IResolverConfig = {
-            movie: {
-                primaryKey: "name",
-                nested: {
-                    director: {
-                        parentKey: "directorId",
+            entities: {
+                movie: {
+                    primaryKey: "name",
+                    nested: {
+                        director: {
+                            parentKey: "directorId",
+                        },
                     },
                 },
-            },
-            director: {
-                primaryKey: "id",
+                director: {
+                    primaryKey: "id",
+                },
             },
         };
 
@@ -45,12 +47,14 @@ describe("query nested entity", () => {
     it("can set global entity resolver to be a different name to the nested entity", async ()  => {
 
         const config: IResolverConfig = {
-            movie: {
-                primaryKey: "name",
-                nested: {
-                    the_director: {
-                        from: "director",
-                        parentKey: "directorId",
+            entities: {
+                movie: {
+                    primaryKey: "name",
+                    nested: {
+                        the_director: {
+                            from: "director",
+                            parentKey: "directorId",
+                        },
                     },
                 },
             },
@@ -64,17 +68,19 @@ describe("query nested entity", () => {
     it("can create function to retreive multiple nested entities", async ()  => {
 
         const config: IResolverConfig = {
-            movie: {
-                primaryKey: "name",
-                nested: {
-                    director: {
-                        multiple: true,
-                        foreignKey: "movie",
+            entities: {
+                movie: {
+                    primaryKey: "name",
+                    nested: {
+                        director: {
+                            multiple: true,
+                            foreignKey: "movie",
+                        },
                     },
                 },
-            },
-            director: {
-                primaryKey: "name",
+                director: {
+                    primaryKey: "name",
+                },
             },
         };
 

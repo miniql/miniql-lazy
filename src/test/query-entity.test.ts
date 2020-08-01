@@ -5,8 +5,10 @@ describe("query entity", () => {
     it("can create resolver to retreive single entity", async ()  => {
 
         const config: IInlineResolverConfig = {
-            movie: {
-                primaryKey: "name",
+            entities: {
+                movie: {
+                    primaryKey: "name",
+                },
             },
         };
 

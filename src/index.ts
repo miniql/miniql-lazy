@@ -51,10 +51,25 @@ export interface IEntityType {
 }
 
 //
+// Configures entity types.
+//
+export interface IEntityTypes {
+    [entityType: string]: IEntityType;
+}
+
+//
 // Configures the query resolver.
 //
 export interface IInlineResolverConfig {
-    [entityType: string]: IEntityType;
+    //
+    // Configures entity types.
+    //
+    entities: IEntityTypes;
+
+    //
+    // Enables verbose mode for the query resolver.
+    //
+    verbose?: boolean;
 }
 
 //
@@ -62,6 +77,15 @@ export interface IInlineResolverConfig {
 //
 export interface IDataSet {
     [entityType: string]: any[];
+}
+
+//
+// Logs an optional verbose message.
+//
+function verbose(config: IInlineResolverConfig, indentLevel: number, msg: string) {
+    if (config.verbose) {
+        console.log(" ".repeat(indentLevel*4) + msg);
+    }
 }
 
 //
@@ -73,14 +97,22 @@ export function createQueryResolver(config: IInlineResolverConfig, inlineData: I
         },
     };
 
-    for (const entityTypeName of Object.keys(config)) {
-        const entityType = config[entityTypeName];
+    verbose(config, 0, `== Creating query resolver for inline data.`);
+
+    for (const entityTypeName of Object.keys(config.entities)) {
+        verbose(config, 1, `Creating query resolver for entity "${entityTypeName}".`);
+
+        const entityType = config.entities[entityTypeName];
         const entityResolver: any = { //TODO: type this properly.
             invoke: async (args: any, context: any) => {
+                verbose(config, 0, `>> Invoked query resolver for entity "${entityTypeName}".`);
+
                 const entities = inlineData[entityTypeName];
-                const primaryKey = entityType.primaryKey; //TODO: Error check this is defined!
+                const primaryKey = entityType.primaryKey; //TODO: Error check this is defined! This could be optional.
                 const entityId = args[primaryKey];
                 if (entityId !== undefined) {
+                    verbose(config, 1, `Querying for single entity with identifier "${entityId}" from primary key "${primaryKey}".`);
+
                     // Single entity query.
                     const filteredEntities = entities.filter(entity => entity[primaryKey] === entityId);
                     if (filteredEntities.length > 0) {
@@ -93,6 +125,8 @@ export function createQueryResolver(config: IInlineResolverConfig, inlineData: I
                     }
                 }
                 else {
+                    verbose(config, 1, `Querying for multiple entities.`);
+
                     // Multiple entity query.
                     return entities;
                 }
@@ -105,22 +139,33 @@ export function createQueryResolver(config: IInlineResolverConfig, inlineData: I
             const nested = entityType.nested;
 
             for (const nestedEntityTypeName of Object.keys(entityType.nested)) {
+                verbose(config, 2, `Creating nested entity resolver "${nestedEntityTypeName}".`);
                 
                 const nestedEntityConfig = nested[nestedEntityTypeName];
 
                 entityResolver.nested[nestedEntityTypeName] = {
                     from: nestedEntityConfig.from,
                     invoke: async (parent: any, args: any, context: any) => {
+                        verbose(config, 0, `>> Invoked nested entity query resolver for entity "${nestedEntityTypeName}".`);
+
                         const nestedEntityConfigName = nestedEntityConfig.from || nestedEntityTypeName;
-                        const nestedEntityType = config[nestedEntityConfigName]; //todo: error check this exists!
+                        const nestedEntityType = config.entities[nestedEntityConfigName]; //todo: error check this exists!
                         const parentKey = nestedEntityConfig.parentKey || entityType.primaryKey; //todo: error check entity type object exists! todo: error check one of these exists.
                         const nestedKey = nestedEntityConfig.foreignKey || nestedEntityType.primaryKey;
                         const nestedEntities = inlineData[nestedEntityConfigName] || []; //todo: error check this exists!
+
+                        verbose(config, 1, `Filtering ${nestedEntities.length} entities using nested key "${nestedKey}" and parent key "${parentKey}".`);
+
                         const filteredEntities = nestedEntities.filter(nestedEntity => nestedEntity[nestedKey] === parent[parentKey]);
+
+                        verbose(config, 1, `Result is ${filteredEntities.length} filtered entities.`);
+
                         if (nestedEntityConfig.multiple === true) {
+                            verbose(config, 1, `Nested resolver returns multiple entities.`);
                             return filteredEntities;
                         }
                         else {
+                            verbose(config, 1, `Nested resolver returns a single entity.`);
                             if (filteredEntities.length === 0) {
                                 return undefined;
                             }
