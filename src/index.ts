@@ -2,19 +2,27 @@
 //
 // Configures a related entity.
 //
-export interface IRelatedEntityConfig { //TODO: error check that one of these is present.
+export interface IRelatedEntityConfig {
     //
-    // The type of entity, if different from the nested entity key.
+    // Set to true to resolve multiple entities.
+    // Defaults to false to resolve a single entity.
+    // 
+    multiple?: boolean;
+
+    //
+    // The name of the global entity resolver, if different from the nested entity key.
     //
     from?: string;
 
     //
     // Specifies the column in the parent entity that relates it to the primaryKey in the nested entity.
+    // This defaults to the parent entities primary key if not specified.
     //
     parentKey?: string;
 
     //
     // Specifies the column in the child entity that relates it to the primaryKey in the parent entity.
+    // This default to the nested entities primary key if not specified.
     //
     foreignKey?: string;
 }
@@ -97,24 +105,28 @@ export function createQueryResolver(config: IInlineResolverConfig, inlineData: I
             const nested = entityType.nested;
 
             for (const nestedEntityTypeName of Object.keys(entityType.nested)) {
+                
+                const nestedEntityConfig = nested[nestedEntityTypeName];
+
                 entityResolver.nested[nestedEntityTypeName] = {
+                    entityGlobalResolverName: nestedEntityConfig.from,
                     invoke: async (parent: any, args: any, context: any) => {
-                        const nestedEntityConfig = nested[nestedEntityTypeName];
                         const nestedEntityConfigName = nestedEntityConfig.from || nestedEntityTypeName;
                         const nestedEntityType = config[nestedEntityConfigName]; //todo: error check this exists!
-                        const parentKey = nestedEntityConfig.parentKey; //todo: error check entity type object exists! todo: error check one of these exists.
-                        const foreignKey = nestedEntityConfig.foreignKey;
-                        const nestedEntities = inlineData[nestedEntityConfigName];
-                        if (parentKey !== undefined) {
-                            const id = parent[parentKey];
-                            return nestedEntities.filter(nestedEntity => nestedEntity[nestedEntityType.primaryKey] === id)[0]; //TODO: what if it doesn't exist?
-                        }
-                        else if (foreignKey !== undefined) {
-                            const parentEntityId = parent[entityType.primaryKey]; //todo: check that it exists.
-                            return nestedEntities.filter(nestedEntity => nestedEntity[foreignKey] === parentEntityId);
+                        const parentKey = nestedEntityConfig.parentKey || entityType.primaryKey; //todo: error check entity type object exists! todo: error check one of these exists.
+                        const nestedKey = nestedEntityConfig.foreignKey || nestedEntityType.primaryKey;
+                        const nestedEntities = inlineData[nestedEntityConfigName] || []; //todo: error check this exists!
+                        const filteredEntities = nestedEntities.filter(nestedEntity => nestedEntity[nestedKey] === parent[parentKey]);
+                        if (nestedEntityConfig.multiple === true) {
+                            return filteredEntities;
                         }
                         else {
-                            //todo: error.
+                            if (filteredEntities.length === 0) {
+                                return undefined;
+                            }
+                            else {
+                                return filteredEntities[0];
+                            }
                         }
                     },
                 }

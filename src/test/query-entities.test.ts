@@ -6,7 +6,7 @@ describe("query entities", () => {
 
         const config: IInlineResolverConfig = {
             movie: {
-                primaryKey: "name",                
+                primaryKey: "name",
             },
         };
 

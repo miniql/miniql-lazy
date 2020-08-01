@@ -42,21 +42,20 @@ describe("query nested entity", () => {
         });
     });
 
-    it("can create function to retreive a nested entities", async ()  => {
+    it("can create function to retreive multiple nested entities", async ()  => {
 
         const config: IResolverConfig = {
             movie: {
                 primaryKey: "name",
-                
                 nested: {
                     director: {
+                        multiple: true,
                         foreignKey: "movie",
                     },
                 },
             },
             director: {
                 primaryKey: "name",
-                
             },
         };
 
@@ -82,11 +81,11 @@ describe("query nested entity", () => {
         };
 
         const result = await resolver.get.movie.nested.director.invoke(parentEntity, {}, {});
-        expect(result).toEqual([ 
+        expect(result).toEqual([
             {
                 name: "Doug Liman",
                 movie: "The Bourne Identity",
-            },
+            }
         ]);
     });
 });
