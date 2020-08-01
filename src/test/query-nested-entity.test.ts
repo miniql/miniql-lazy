@@ -85,7 +85,7 @@ describe("query nested entity", () => {
             {
                 name: "Doug Liman",
                 movie: "The Bourne Identity",
-            }
+            },
         ]);
     });
 });
