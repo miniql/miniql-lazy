@@ -37,7 +37,7 @@ describe("query nested entity", () => {
             directorId: "1234",
         };
 
-        const result = await resolver.get.movie.nested.director.invoke(parentEntity, {}, {});
+        const result = await resolver.get.movie.nested!.director.invoke(parentEntity, {}, {});
         expect(result).toEqual({
             id: "1234",
             name: "Doug Liman",
@@ -62,7 +62,7 @@ describe("query nested entity", () => {
 
         const resolver = await createQueryResolver(config, {});
         
-        expect(resolver.get.movie.nested.the_director.from).toBe("director");
+        expect(resolver.get.movie.nested!.the_director.from).toBe("director");
     });
 
     it("can create function to retreive multiple nested entities", async ()  => {
@@ -106,7 +106,7 @@ describe("query nested entity", () => {
             name: "The Bourne Identity",
         };
 
-        const result = await resolver.get.movie.nested.director.invoke(parentEntity, {}, {});
+        const result = await resolver.get.movie.nested!.director.invoke(parentEntity, {}, {});
         expect(result).toEqual([
             {
                 name: "Doug Liman",

@@ -1,3 +1,4 @@
+import { IQueryResolver } from "@miniql/core-types";
 
 //
 // Configures a related entity.
@@ -91,7 +92,7 @@ function verbose(config: IInlineResolverConfig, indentLevel: number, msg: string
 //
 // Creates the query resolver for a dataset with a particular configuration.
 //
-export function createQueryResolver(config: IInlineResolverConfig, inlineData: IDataSet): any {
+export function createQueryResolver(config: IInlineResolverConfig, inlineData: IDataSet): IQueryResolver {
     const resolver: any = { 
         get: {
         },
