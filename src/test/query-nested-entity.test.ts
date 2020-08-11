@@ -1,10 +1,11 @@
-import { createQueryResolver, IInlineResolverConfig as IResolverConfig } from "..";
+import { createQueryResolver } from "..";
+import { IQueryResolverConfig } from "../lazy";
 
 describe("query nested entity", () => {
 
     it("can create function to retreive a nested entity", async ()  => {
 
-        const config: IResolverConfig = {
+        const config: IQueryResolverConfig = {
             entities: {
                 movie: {
                     primaryKey: "name",
@@ -46,7 +47,7 @@ describe("query nested entity", () => {
 
     it("can set global entity resolver to be a different name to the nested entity", async ()  => {
 
-        const config: IResolverConfig = {
+        const config: IQueryResolverConfig = {
             entities: {
                 movie: {
                     primaryKey: "name",
@@ -67,7 +68,7 @@ describe("query nested entity", () => {
 
     it("can create function to retreive multiple nested entities", async ()  => {
 
-        const config: IResolverConfig = {
+        const config: IQueryResolverConfig = {
             entities: {
                 movie: {
                     primaryKey: "name",

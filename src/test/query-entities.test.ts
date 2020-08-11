@@ -1,10 +1,11 @@
-import { createQueryResolver, IInlineResolverConfig } from "..";
+import { createQueryResolver } from "..";
+import { IQueryResolverConfig } from "../lazy";
 
 describe("query entities", () => {
 
     it("can create resolver to retreive multiple entities", async ()  => {
 
-        const config: IInlineResolverConfig = {
+        const config: IQueryResolverConfig = {
             entities: {
                 movie: {
                     primaryKey: "name",
@@ -42,7 +43,7 @@ describe("query entities", () => {
 
     it("can create resolver for multiple entity types", async ()  => {
 
-        const config: IInlineResolverConfig = {
+        const config: IQueryResolverConfig = {
             entities: {
                 movie: {
                     primaryKey: "name",
