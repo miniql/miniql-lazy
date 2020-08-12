@@ -1,6 +1,6 @@
-# @miniql/inline
+# @miniql/lazy
 
-A [MiniQL](https://github.com/miniql/miniql) query resolver to query inline data.
+A [MiniQL](https://github.com/miniql/miniql) query resolver lazily loaded data. This MiniQL plugin is designed to be used to build other plugins.
 
 Any problems? Please log an issue on this repo.
 
@@ -12,30 +12,30 @@ Install the modules in your Node.js project:
 
 ```bash
 npm install --save miniql
-npm install --save @miniql/inline
+npm install --save @miniql/lazy
 ```
 
 Import the modules (JavaScript):
 
 ```javascript
 const { miniql } = require("miniql");
-const { createQueryResolver } = require("@miniql/inline");
+const { createQueryResolver } = require("@miniql/lazy");
 ```
 
 Import the modules (TypeScript):
 
 ```typescript
 import { miniql } from "miniql";
-import { createQueryResolver } from "@miniql/inline";
+import { createQueryResolver } from "@miniql/lazy";
 ```
 
-Configure and create an inline data query resolver:
+Then create a configuration for your data:
 
 ```javascript
     //
-    // Configures the inline query resolver.
+    // Configures the query resolver.
     //
-    const inlineQueryConfig = {
+    const queryConfig = {
         species: {
             primaryKey: "name",
             nested: {
@@ -54,48 +54,41 @@ Configure and create an inline data query resolver:
             },
         },
     };
-
-    //
-    // The data that we'd like to query.
-    //
-    const data = {
-        species: [
-            {
-                name: "Hutt",
-                classification: "gastropod",
-                designation: "sentient",
-                language: "Huttese",
-                homeworld: "Nal Hutta",
-            },
-            
-            // ... more data goes here ..
-        ],
-
-        planet: [
-            {
-                name: "Nal Hutta",
-                rotation_period: 87,
-                orbital_period: 413,
-                diameter: 12150,
-                climate: "temperate",
-                terrain: "urban, oceans, swamps, bogs",
-                population: 7000000000
-            }
-
-            // ... more data goes here ..
-
-        ],
-
-        // ... more data goes here ..
-    };
-    
-    // 
-    // Creates a query resolver for inline data.
-    //
-    const queryResolver = await createQueryResolver(inlineQueryConfig);
 ```
 
-Now you can make queries against the dataset, for example:
+Now create a lazy data loader:
+
+```javascript
+    const dataLoader = {
+
+        //
+        // Loads a single entity.
+        //
+        loadSingleEntity = async (entityTypeName: string, primaryKey: string, entityId: string): Promise<any> => {
+            const entity = // Load a single of type 'entityTypeName' with a value in its field 'primaryKey' of value 'entityId'.
+            return entity;
+        },
+
+        //
+        // Load the set of entities.
+        //
+        async loadEntities(entityTypeName: string): Promise<any[]> {
+            const entities = // Load all entities of type 'entityTypeName'.
+            return entities;
+        },
+    };
+```
+
+Finally create a lazy query resolver with your configuration and data loader:
+
+```javascript
+    // 
+    // Creates a query resolver for lazy loadeed data.
+    //
+    const queryResolver = await createQueryResolver(queryConfig, dataLoader);
+```
+
+Now you can make queries against the lazily loaded dataset, for example:
 
 ```javascript
     const query = {

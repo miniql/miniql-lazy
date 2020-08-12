@@ -1,5 +1,6 @@
 import { createQueryResolver } from "..";
-import { IQueryResolverConfig } from "../lazy";
+import { IQueryResolverConfig } from "..";
+import { createInlineDataLoader } from "./inline-data-loader";
 
 describe("query nested entity", () => {
 
@@ -30,7 +31,7 @@ describe("query nested entity", () => {
             ],
         };
 
-        const resolver = await createQueryResolver(config, data);
+        const resolver = await createQueryResolver(config, createInlineDataLoader(data));
         
         const parentEntity = {
             name: "The Bourne Identity",
@@ -61,7 +62,7 @@ describe("query nested entity", () => {
             },
         };
 
-        const resolver = await createQueryResolver(config, {});
+        const resolver = await createQueryResolver(config, createInlineDataLoader({}));
         
         expect(resolver.get.movie.nested!.the_director.from).toBe("director");
     });
@@ -101,7 +102,7 @@ describe("query nested entity", () => {
             ],
         };
 
-        const resolver = await createQueryResolver(config, data);
+        const resolver = await createQueryResolver(config, createInlineDataLoader(data));
         
         const parentEntity = { 
             name: "The Bourne Identity",

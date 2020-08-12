@@ -1,5 +1,6 @@
 import { createQueryResolver  } from "..";
-import { IQueryResolverConfig } from "../lazy";
+import { IQueryResolverConfig } from "..";
+import { createInlineDataLoader } from "./inline-data-loader";
 
 describe("query entity", () => {
 
@@ -26,7 +27,7 @@ describe("query entity", () => {
             ],
         };
 
-        const resolver = await createQueryResolver(config, data);
+        const resolver = await createQueryResolver(config, createInlineDataLoader(data));
         
         const args = { 
             name: "The Bourne Identity",

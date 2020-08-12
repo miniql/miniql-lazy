@@ -1,5 +1,6 @@
 import { createQueryResolver } from "..";
-import { IQueryResolverConfig } from "../lazy";
+import { IQueryResolverConfig } from "..";
+import { createInlineDataLoader } from "./inline-data-loader";
 
 describe("query entities", () => {
 
@@ -26,7 +27,7 @@ describe("query entities", () => {
             ],
         };
 
-        const resolver = await createQueryResolver(config, data);
+        const resolver = await createQueryResolver(config, createInlineDataLoader(data));
         
         const result = await resolver.get.movie.invoke({}, {});
         expect(result).toEqual([
@@ -75,7 +76,7 @@ describe("query entities", () => {
             ],
         };
 
-        const resolver = await createQueryResolver(config, data);
+        const resolver = await createQueryResolver(config, createInlineDataLoader(data));
 
         const movies = await resolver.get.movie.invoke({}, {});
         expect(movies).toEqual([

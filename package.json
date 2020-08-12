@@ -1,7 +1,7 @@
 {
-    "name": "@miniql/inline",
-    "version": "0.0.7",
-    "description": "A MiniQL query resolver for inline data.",
+    "name": "@miniql/lazy",
+    "version": "0.0.1",
+    "description": "A MiniQL query resolver for lazily loaded data.",
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "scripts": {
@@ -25,7 +25,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://miniql@github.com/miniql/miniql-inline.git"
+        "url": "git+https://miniql@github.com/miniql/miniql-lazy.git"
     },
     "keywords": [
         "data",
@@ -35,9 +35,9 @@
     "author": "ashley@codecapers.com.au",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/miniql/miniql-inline/issues"
+        "url": "https://github.com/miniql/miniql-lazy/issues"
     },
-    "homepage": "https://github.com/miniql/miniql-inline#readme",
+    "homepage": "https://github.com/miniql/miniql-lazy#readme",
     "dependencies": {},
     "devDependencies": {
         "@miniql/core-types": "0.0.1",
