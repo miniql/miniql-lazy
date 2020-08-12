@@ -1,6 +1,6 @@
 {
     "name": "@miniql/lazy",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A MiniQL query resolver for lazily loaded data.",
     "main": "build/index.js",
     "types": "build/index.d.ts",
@@ -38,9 +38,10 @@
         "url": "https://github.com/miniql/miniql-lazy/issues"
     },
     "homepage": "https://github.com/miniql/miniql-lazy#readme",
-    "dependencies": {},
+    "dependencies": {
+        "@miniql/core-types": "0.0.1"
+    },
     "devDependencies": {
-        "@miniql/core-types": "0.0.1",
         "@types/jest": "^26.0.4",
         "@types/node": "14.0.13",
         "jest": "^26.1.0",
